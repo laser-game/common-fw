@@ -2,9 +2,6 @@
 #define __CM_SOUND_INCLUDED__
 
 
-//#include "stm32f4xx_hal.h"
-
-
 typedef enum {
     SOUND_CMD_STOP,
     SOUND_CMD_SET_SOUND_SET_EN,
@@ -21,7 +18,7 @@ typedef enum {
     SOUND_CMD_PLAY_NUMBER_4,
     SOUND_CMD_PLAY_NUMBER_5,
     SOUND_CMD_PLAY_PLAY,
-    SOUND_CMD_PLAY_WELL_DONE
+    SOUND_CMD_PLAY_WELL_DONE,
 } sound_cmd_t;
 
 typedef enum {
