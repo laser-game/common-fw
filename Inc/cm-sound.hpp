@@ -2,7 +2,7 @@
 #define __CM_SOUND_INCLUDED__
 
 
-typedef enum {
+typedef enum  sound_cmd_t {
     SOUND_CMD_STOP,
     SOUND_CMD_SET_SOUND_SET_EN,
     SOUND_CMD_SET_SOUND_SET_CZ,
@@ -21,7 +21,7 @@ typedef enum {
     SOUND_CMD_PLAY_WELL_DONE,
 } sound_cmd_t;
 
-typedef enum {
+typedef enum sound_set_t {
     SOUND_SET_EN,
     SOUND_SET_CZ,
 } sound_set_t;
