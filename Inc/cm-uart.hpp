@@ -23,12 +23,12 @@ public:
     inline UART(UART_HandleTypeDef *huart)
     {
         this->huart = huart;
-        rx();
     }
 
-    inline void tx(string str)
+    inline void set_baudrate(uint32_t baudrate=9600)
     {
-        HAL_UART_Transmit(huart, (uint8_t *) str.c_str(), str.size(), UART_TIMEOUT);
+        huart->Init.BaudRate = baudrate;
+        HAL_UART_Init(huart);
     }
 
     inline void tx(uint8_t byte)
@@ -36,7 +36,22 @@ public:
         HAL_UART_Transmit(huart, (uint8_t *) &byte, 1, UART_TIMEOUT);
     }
 
-    inline void rx(void)
+    inline void tx(vector<uint8_t> vector_bytes)
+    {
+        HAL_UART_Transmit(huart, (uint8_t *) vector_bytes.data(), vector_bytes.size(), UART_TIMEOUT);
+    }
+
+    inline void tx(string str)
+    {
+        HAL_UART_Transmit(huart, (uint8_t *) str.c_str(), str.size(), UART_TIMEOUT);
+    }
+
+    inline void rx(uint8_t *p_data, uint16_t size, uint32_t timeout = 10)
+    {
+        HAL_UART_Receive(huart, p_data, size, timeout);
+    }
+
+    inline void rx_it(void)
     {
         HAL_UART_Receive_IT(huart, buffer_rx, 1);
     }
