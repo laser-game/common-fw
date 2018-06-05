@@ -27,4 +27,9 @@ using namespace std;
       (pin_state == GPIO_PIN_SET) ? true : false \
     )
 
+#define bool_to_gpio_pin_state(pin_state) \
+    ( \
+      (pin_state) ? (GPIO_PIN_SET) : (GPIO_PIN_RESET) \
+    )
+
 #endif // ifndef __CM_MACRO_INCLUDED__
