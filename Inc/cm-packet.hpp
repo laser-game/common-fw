@@ -1,7 +1,11 @@
 #ifndef __CM_PACKET_INLUDED__
 #define __CM_PACKET_INLUDED__
 
-#include <vector>
+#define PACKET_SIZE_MIN  8
+#define PACKET_SIZE_MAX  512
+#define PACKET_SIZE_HEAD 3
+#define PACKET_SIZE_CRC  4
+#define PACKET_SIZE_INFO PACKET_SIZE_HEAD + PACKET_SIZE_CRC
 
 #ifdef STM32_F0
 # include "stm32f0xx_hal.h"
@@ -13,6 +17,7 @@
 #include "cm-circular-buffer.hpp"
 #include "cm-macro.hpp"
 
+#include <vector>
 using namespace std;
 
 class Packet
@@ -21,15 +26,16 @@ private:
     uint8_t address;
     uint16_t size;
     vector<uint8_t> data;
-    const uint8_t PACKET_SIZE_MIN  = 8;
-    const uint16_t PACKET_SIZE_MAX = 512;
-    const uint8_t PACKET_SIZE_HEAD = 3;
-    const uint8_t PACKET_SIZE_CRC  = 4;
-    const uint8_t PACKET_SIZE_INFO = PACKET_SIZE_HEAD + PACKET_SIZE_CRC;
+
+    uint16_t index_start;
+    uint16_t index_stop;
+
 public:
     inline Packet(uint8_t address)
     {
-        this->address = address;
+        this->address     = address;
+        this->index_start = 0;
+        this->index_stop  = 0;
     }
 
     inline void set_address(uint8_t address)
@@ -42,8 +48,23 @@ public:
         return address;
     }
 
+    inline uint16_t get_index_start(void) const
+    {
+        return this->index_start;
+    }
+
+    inline uint16_t get_index_stop(void) const
+    {
+        return this->index_stop;
+    }
+
+    inline uint16_t get_size(void) const
+    {
+        return this->size;
+    }
+
     void create(CircularBuffer *buffer, vector<uint8_t> data);
-    void find(CircularBuffer *buffer);
+    bool find(CircularBuffer *buffer);
 };
 
 #endif // ifndef __CM_PACKET_INLUDED__

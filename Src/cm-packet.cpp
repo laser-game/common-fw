@@ -20,17 +20,17 @@ void Packet::create(CircularBuffer *buffer, vector<uint8_t> data)
     buffer->insert((uint8_t) (crc >> 0));
 }
 
-void Packet::find(CircularBuffer *buffer)
+bool Packet::find(CircularBuffer *buffer)
 {
     uint32_t crc;
-    uint16_t size, index = buffer->get_index_read();
+    uint16_t size, index = 0; //buffer->get_index_read();
 
     for (uint16_t i = 0; i < buffer->size(); i++, index++)
         if (buffer->read(index) == address)
         {
             size  = uint16_t(buffer->read(index + 1)) << 8;
             size += uint16_t(buffer->read(index + 2));
-            if (size >= PACKET_SIZE_MIN && size <= PACKET_SIZE_MAX)
+            if (size >= PACKET_SIZE_MIN and size <= PACKET_SIZE_MAX and size <= CIRCULAR_BUFFER_SIZE)
             {
                 crc  = uint32_t(buffer->read(index + size - 4)) << 24;
                 crc += uint32_t(buffer->read(index + size - 3)) << 16;
@@ -38,10 +38,13 @@ void Packet::find(CircularBuffer *buffer)
                 crc += buffer->read(index + size - 1);
                 if (crc == CRC32::calculate(buffer, index, size - 4))
                 {
-                    /*printf("packet is ok ");
-                    printf("crc: %08X ", crc);
-                    printf("start: %d stop: %d\n", index, buffer->transform_index(index + size - 1));*/
+                    buffer->destroy_packet(index);
+                    this->size = size;
+                    this->index_start = buffer->transform_index(index + PACKET_SIZE_HEAD);
+                    this->index_stop = buffer->transform_index(index + size - 1 - PACKET_SIZE_CRC);
+                    return true;
                 }
             }
         }
+    return false;
 }
