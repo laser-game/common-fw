@@ -46,6 +46,14 @@ uint32_t CRC32::calculate(uint8_t byte)
     return _table[byte];
 }
 
+uint32_t CRC32::calculate(uint8_t *data, uint16_t size)
+{
+    uint32_t crc = ~0;
+    for (uint16_t i = 0; i < size; i++)
+        crc = _table[(crc ^ data[i]) & 0xFF] ^ (crc >> 8);
+    return ~crc;
+}
+
 uint32_t CRC32::calculate(CircularBuffer *buffer, uint16_t start, uint16_t size)
 {
     uint32_t crc = ~0;
