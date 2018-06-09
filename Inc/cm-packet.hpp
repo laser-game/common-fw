@@ -7,6 +7,8 @@
 #define PACKET_SIZE_CRC  4
 #define PACKET_SIZE_INFO PACKET_SIZE_HEAD + PACKET_SIZE_CRC
 
+#define BROADCAST_ADDRESS 0
+
 #ifdef STM32_F0
 # include "stm32f0xx_hal.h"
 #elif defined STM32_F4
@@ -25,12 +27,13 @@ class Packet
 private:
     uint8_t address;
     uint16_t size;
-    vector<uint8_t> data;
-
     uint16_t index_start;
     uint16_t index_stop;
 
 public:
+    vector<uint8_t> data;
+    vector<uint8_t> stream;
+
     inline Packet(uint8_t address)
     {
         this->address     = address;
@@ -63,6 +66,7 @@ public:
         return this->size;
     }
 
+    void create(void);
     void create(CircularBuffer *buffer, vector<uint8_t> data);
     bool find(CircularBuffer *buffer);
 };
