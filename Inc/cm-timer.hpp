@@ -1,7 +1,6 @@
 #ifndef __CM_TIM_INCLUDED__
 #define __CM_TIM_INCLUDED__
 
-#define UART_TIMEOUT 0xFFFF
 
 #ifdef STM32_F0
 # include "stm32f0xx_hal.h"
