@@ -23,6 +23,7 @@ HMTRP::HMTRP(
     enable(true);
     HAL_Delay(10);
     config(true);
+    HAL_Delay(10);
 
     while (not read_config())
     {
