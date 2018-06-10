@@ -26,4 +26,18 @@ public:
     static uint32_t calculate(CircularBuffer *buffer, uint16_t start, uint16_t size);
 };
 
+uint32_t CRC16(void);
+
+
+class CRC16
+{
+private:
+    static uint16_t _table[256];
+    static uint32_t _generator_polynomial;
+    static uint16_t _calculate(uint8_t byte);
+public:
+    static void init(vector<uint8_t> gp = vector_uint8_t_array(14, 10, 8, 7, 4, 3));
+    static uint16_t calculate(uint8_t byte);
+};
+
 #endif // ifndef __CM_CRC_INLUDED__
